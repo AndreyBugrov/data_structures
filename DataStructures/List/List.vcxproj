@@ -18,19 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="database.cpp" />
-    <ClCompile Include="data_user.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="database.h" />
-    <ClInclude Include="data_user.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{00c41327-928b-4867-8477-5a69b2a0145b}</ProjectGuid>
-    <RootNamespace>Cache</RootNamespace>
+    <ProjectGuid>{474fad2d-b150-4ce9-bddc-f504b39cb103}</ProjectGuid>
+    <RootNamespace>List</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -146,6 +138,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Cache\mylist.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Cache\mylist.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

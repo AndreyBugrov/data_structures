@@ -15,18 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="data_user.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="database.cpp">
+    <ClCompile Include="..\Cache\mylist.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data_user.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="database.h">
+    <ClInclude Include="..\Cache\mylist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
