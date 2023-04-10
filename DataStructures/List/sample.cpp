@@ -1,4 +1,4 @@
-#include "mylist.h"
+#include "list.h"
 #include <iostream>
 int main() { 
   List<int> l1;
