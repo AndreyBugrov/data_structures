@@ -1,19 +1,23 @@
 #pragma once
 #include <string>  // exception
+
+/// TO DO:
+/// list(list) +
+/// list = list
+/// resize
+/// clear
+/// remove
+/// reverse
 template <class T>
 class List {
  protected:
   struct Node {
     T data_;
-    Node* prev_;
     Node* next_;
-    Node(const T& data, Node* prev = nullptr, Node* next = nullptr)
-        : data_(data), prev_(prev), next_(next) {}
-    Node(const Node& node)
-        : data_(node.data_), prev_(node.prev_), next_(node.next_) {}
+    Node(const T& data, Node* next = nullptr) : data_(data), next_(next) {}
+    Node(const Node& node) : data_(node.data_), next_(node.next_) {}
     const Node& operator=(const Node& node) {
       data_ = node.data_;
-      prev_ = node.prev_;
       next_ = node.next_;
     }
     ~Node() = default;
@@ -65,9 +69,9 @@ class List {
       throw std::string("List is empty");
     }
     return first_->data_;
-  }  // access the first element +
+  }  // access the first element + +
   void push_front(const T& elem) {
-    Node* node = new Node(elem, nullptr, first_);
+    Node* node = new Node(elem, first_);
     first_ = node;
     size_++;
   }  // inserts an element to the beginning + +
@@ -79,36 +83,20 @@ class List {
     size_--;
   }  // removes the first element + +
   void resize(size_t size) {
-    if (size == size_) {
+    if (size_ == size) {
       return;
     }
-    if (size < size_) {
-      Node* cur = first_;
-      for (int i = 1; i < size; i++) {
-        cur = cur->next_;
-      }
-      if (size_ > 0) {
-        {
-          cur = cur->next_;
-          while (cur != nullptr) {
-            Node* tmp = cur;
-            cur = cur->next_;
-            delete tmp;
-          }
-        }
-      }
-      size_ = size;
+    if (size_ > size) {
+      do {
+        pop_front();
+      } while (size_ > size);
     } else {
-      T empty_data{};
-      Node* cur = first_;
-      for (; cur->next_ != nullptr; cur = cur->next_)
-        ;
-      for (; size_ <= size; size_++) {
-        cur->next_ = new Node(empty_data);
-        cur = cur->next_;
-      }
+      T empty_elem{};
+      do {
+        push_front(empty_elem);
+      } while (size_ < size);
     }
-  }  // changes the number of elements stored +
+  }  // changes the number of elements stored from the end +
   void clear() noexcept {
     while (first_ != nullptr) {
       Node* tmp = first_;
@@ -127,28 +115,31 @@ class List {
       delete tmp;
       size_--;
     }
+    if (size_ == 0 || size_ == 1) {
+      return;  // because it cannot be size_== 1 and first_->data_==elem (in
+               // that case first_ will be nullptr)
+    }
     Node* cur = first_->next_;
     Node* prev = first_;
-    for (Node* prev = first_; cur != nullptr; prev = prev->next_) {
+    for (; cur != nullptr;) {
       if (cur->data_ == elem) {
         Node* tmp = cur;
         cur = cur->next_;
         prev->next_ = cur;
         delete tmp;
         size_--;
+      } else {
+        prev = prev->next_;
+        cur = cur->next_;
       }
     }
   }  // removes all elements that are equal to passed value +
   void reverse() {
-    if (first_ == nullptr || first_->next_ == nullptr) {
-      return;
+    List<T> tmp;
+    for (Node* cur = first_; cur != nullptr; cur = cur->next_) {
+      tmp.push_front(cur->data_);
     }
-    Node* reverse_cur = first_;
-    reverse_cur->next_ = nullptr;
-    for (Node* cur = first_; cur->next_ != nullptr; cur = cur->next_) {
-      reverse_cur = cur->next_;
-      reverse_cur->next_ = cur;
-    }
-    first_ = reverse_cur;
+    first_ = tmp.first_;
+    tmp.first_ = nullptr;
   }  // reverses the order of the elements +
 };
