@@ -1,13 +1,6 @@
 #pragma once
 #include <string>  // exception
 
-/// TO DO:
-/// list(list) +
-/// list = list
-/// resize
-/// clear
-/// remove
-/// reverse
 template <class T>
 class List {
  protected:
@@ -26,7 +19,7 @@ class List {
   size_t size_;
 
  public:
-  List() : first_(nullptr), size_(0) {}  // CTOR +
+  List() : first_(nullptr), size_(0) {}  // CTOR
   List(const List<T>& list) {
     if (list.first_ == nullptr) {
       size_ = 0;
@@ -41,47 +34,47 @@ class List {
       this_cur->next_ = new Node(other_cur->next_->data_);
       size_++;
     }
-  }  // Copy-CTOR +
+  }  // Copy-CTOR
   ~List() {
     clear();
     delete first_;
-  }  // DTOR +
+  }  // DTOR
   const List<T>& operator=(const List<T>& list) {
     List<T> tmp(list);
     first_ = tmp.first_;
     size_ = tmp.size_;
     tmp.first_ = nullptr;
     return *this;
-  }  // Copy-assignment +
+  }  // Copy-assignment
   List<T>& operator=(List&& list) noexcept {
     std::swap(list, *this);
     list.clear();
     return *this;
-  }  // Move-assignment +
+  }  // Move-assignment
   bool empty() const noexcept {
     return size_ == 0;
-  }  // checks whether the container is empty + +
+  }  // checks whether the container is empty
   size_t size() const noexcept {
     return size_;
-  }  // returns the number of elements + +
+  }  // returns the number of elements
   const T& front() const {
     if (size_ == 0) {
       throw std::string("List is empty");
     }
     return first_->data_;
-  }  // access the first element + +
+  }  // access the first element
   void push_front(const T& elem) {
     Node* node = new Node(elem, first_);
     first_ = node;
     size_++;
-  }  // inserts an element to the beginning + +
+  }  // inserts an element to the beginning
   void pop_front() noexcept {
     if (size_ == 0) return;
     Node* tmp(first_);
     first_ = first_->next_;
     delete tmp;
     size_--;
-  }  // removes the first element + +
+  }  // removes the first element
   void resize(size_t size) {
     if (size_ == size) {
       return;
@@ -96,7 +89,7 @@ class List {
         push_front(empty_elem);
       } while (size_ < size);
     }
-  }  // changes the number of elements stored from the end +
+  }  // changes the number of elements stored from the beginnig (as in stack)
   void clear() noexcept {
     while (first_ != nullptr) {
       Node* tmp = first_;
@@ -133,7 +126,7 @@ class List {
         cur = cur->next_;
       }
     }
-  }  // removes all elements that are equal to passed value +
+  }  // removes all elements that are equal to passed value
   void reverse() {
     List<T> tmp;
     for (Node* cur = first_; cur != nullptr; cur = cur->next_) {
@@ -141,5 +134,5 @@ class List {
     }
     first_ = tmp.first_;
     tmp.first_ = nullptr;
-  }  // reverses the order of the elements +
+  }  // reverses the order of the elements
 };
