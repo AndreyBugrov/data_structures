@@ -399,6 +399,13 @@ TEST(List_iterator, can_push_element_into_list_after_iterator) {
   ++it1;
   ASSERT_EQ(3, *it1);
 }
+TEST(List_iterator, cant_push_element_into_list_after_empty_iterator) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(5);
+  List<int>::iterator it;
+  ASSERT_ANY_THROW(l.push_after(it, 4));
+}
 TEST(List_iterator, can_erase_element_from_list_after_iterator) {
   List<int> l;
   l.push_front(3);
@@ -410,11 +417,11 @@ TEST(List_iterator, can_erase_element_from_list_after_iterator) {
   ++it1;
   ASSERT_EQ(3, *it1);
 }
-
-//
-// TEST(List, ){List<int> l; ASSERT_}
-// TEST(List, ){List<int> l;l.push_front(3); ASSERT_}
-// TEST(List, ){List<int> l1;l1.push_front(3); List<int>
-// l2;l2.push_front(-42);ASSERT_} TEST(List, ) {
-//  ASSERT_
-//}
+TEST(List_iterator, cant_erase_element_from_list_after_empty_iterator) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(4);
+  l.push_front(5);
+  List<int>::iterator it;
+  ASSERT_ANY_THROW(l.erase_after(it));
+}

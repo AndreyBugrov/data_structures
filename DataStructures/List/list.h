@@ -22,6 +22,7 @@ class List {
   struct iterator {
    private:
     friend class List<T>;
+
    protected:
     Node* cur_;
 
@@ -168,21 +169,28 @@ class List {
   void swap(List<T>& b) noexcept {
     std::swap(this->first_, b.first_);
     std::swap(this->size_, b.size_);
-  }  // swaps content of two lists
+  }  // swaps the content of two lists (member function)
   iterator begin() const noexcept { return iterator(first_); }
   iterator end() const noexcept { return iterator(nullptr); }
   void push_after(iterator& it, const T& elem) {
+    if (it.cur_ == nullptr) {
+      throw std::string("Null iterator");
+    }
     Node* tmp = new Node(elem, it.cur_->next_);
     it.cur_->next_ = tmp;
-  }
-  void erase_after(iterator& it) { Node* tmp = it.cur_->next_;
+  }  // insert the element after iterator
+  void erase_after(iterator& it) {
+    if (it.cur_ == nullptr) {
+      throw std::string("Null iterator");
+    }
+    Node* tmp = it.cur_->next_;
     if (it.cur_->next_ != nullptr && it.cur_->next_->next_ != nullptr) {
       it.cur_->next_ = it.cur_->next_->next_;
     }
     delete tmp;
-  }
+  }  // removes the element after iterator
 };
 template <class T>
 void swap(List<T>& a, List<T>& b) {
   a.swap(b);
-}
+}  // swaps the content of two lists (non-member function)
