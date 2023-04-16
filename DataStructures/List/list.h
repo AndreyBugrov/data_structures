@@ -30,13 +30,6 @@ class List {
     iterator(Node* cur = nullptr) : cur_(cur) {}
     iterator(const iterator& it) : cur_(it.cur_) {}
     T& operator*() const { return cur_->data_; }
-    /*T* operator->() const {
-      if (cur_ != nullptr) {
-        return &(cur_->data);
-      } else {
-        return nullptr;
-      }
-    }*/
     bool operator!=(const iterator& i) const { return cur_ != i.cur_; }
     bool operator==(const iterator& i) const { return cur_ == i.cur_; }
     const iterator& operator++() {
