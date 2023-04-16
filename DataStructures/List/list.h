@@ -19,6 +19,36 @@ class List {
   size_t size_;
 
  public:
+  struct iterator {
+   private:
+    friend class List<T>;
+   protected:
+    Node* cur_;
+
+   public:
+    iterator(Node* cur = nullptr) : cur_(cur) {}
+    iterator(const iterator& it) : cur_(it.cur_) {}
+    T& operator*() const { return cur_->data_; }
+    /*T* operator->() const {
+      if (cur_ != nullptr) {
+        return &(cur_->data);
+      } else {
+        return nullptr;
+      }
+    }*/
+    bool operator!=(const iterator& i) const { return cur_ != i.cur_; }
+    bool operator==(const iterator& i) const { return cur_ == i.cur_; }
+    const iterator& operator++() {
+      cur_ = cur_->next_;
+      return *this;
+    }
+    iterator operator++(int) {
+      iterator tmp = *this;
+      cur_ = cur_->next_;
+      return tmp;
+    }
+  };
+
   List() : first_(nullptr), size_(0) {}  // CTOR
   List(const List<T>& list) {
     if (list.first_ == nullptr) {
@@ -58,7 +88,7 @@ class List {
     return size_;
   }  // returns the number of elements
   const T& front() const {
-    if (size_ == 0) {
+    if (empty()) {
       throw std::string("List is empty");
     }
     return first_->data_;
@@ -69,7 +99,7 @@ class List {
     size_++;
   }  // inserts an element to the beginning
   void pop_front() noexcept {
-    if (size_ == 0) return;
+    if (empty()) return;
     Node* tmp(first_);
     first_ = first_->next_;
     delete tmp;
@@ -99,7 +129,7 @@ class List {
     size_ = 0;
   }  // clears the contents +
   void remove(const T& elem) {
-    if (size_ == 0) {
+    if (empty()) {
       return;
     }
     while (first_ != nullptr && first_->data_ == elem) {
@@ -108,7 +138,7 @@ class List {
       delete tmp;
       size_--;
     }
-    if (size_ == 0 || size_ == 1) {
+    if (empty() || size_ == 1) {
       return;  // because it cannot be size_== 1 and first_->data_==elem (in
                // that case first_ will be nullptr)
     }
@@ -135,4 +165,24 @@ class List {
     first_ = tmp.first_;
     tmp.first_ = nullptr;
   }  // reverses the order of the elements
+  void swap(List<T>& b) noexcept {
+    std::swap(this->first_, b.first_);
+    std::swap(this->size_, b.size_);
+  }  // swaps content of two lists
+  iterator begin() const noexcept { return iterator(first_); }
+  iterator end() const noexcept { return iterator(nullptr); }
+  void push_after(iterator& it, const T& elem) {
+    Node* tmp = new Node(elem, it.cur_->next_);
+    it.cur_->next_ = tmp;
+  }
+  void erase_after(iterator& it) { Node* tmp = it.cur_->next_;
+    if (it.cur_->next_ != nullptr && it.cur_->next_->next_ != nullptr) {
+      it.cur_->next_ = it.cur_->next_->next_;
+    }
+    delete tmp;
+  }
 };
+template <class T>
+void swap(List<T>& a, List<T>& b) {
+  a.swap(b);
+}

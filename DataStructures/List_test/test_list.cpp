@@ -195,7 +195,7 @@ TEST(List, does_not_remove_non_existant_element) {
 TEST(List, can_remove_every_element) {
   List<int> l;
   for (int i = 9; i < 13; i++) {
-      l.push_front(3);
+    l.push_front(3);
   }
   l.remove(3);
   ASSERT_EQ(l.size(), 0);
@@ -224,6 +224,193 @@ TEST(List, reverses_list_with_many_elements) {
   l.pop_front();
   ASSERT_EQ(l.front(), 31);
 }
+TEST(List, swaps_content_of_two_lists_as_member_function) {
+  List<int> l1;
+  l1.push_front(4);
+  l1.push_front(5);
+  List<int> l2;
+  l2.push_front(19);
+  l2.push_front(7);
+  l2.push_front(-1);
+
+  l1.swap(l2);
+
+  ASSERT_EQ(l1.size(), 3);
+  ASSERT_EQ(l1.front(), -1);
+  l1.pop_front();
+  ASSERT_EQ(l1.front(), 7);
+  l1.pop_front();
+  ASSERT_EQ(l1.front(), 19);
+
+  ASSERT_EQ(l2.size(), 2);
+  ASSERT_EQ(l2.front(), 5);
+  l2.pop_front();
+  ASSERT_EQ(l2.front(), 4);
+}
+TEST(List, swaps_content_of_two_lists_as_non_member_function) {
+  List<int> l1;
+  l1.push_front(4);
+  l1.push_front(5);
+  List<int> l2;
+  l2.push_front(19);
+  l2.push_front(7);
+  l2.push_front(-1);
+
+  swap(l1, l2);
+
+  ASSERT_EQ(l1.size(), 3);
+  ASSERT_EQ(l1.front(), -1);
+  l1.pop_front();
+  ASSERT_EQ(l1.front(), 7);
+  l1.pop_front();
+  ASSERT_EQ(l1.front(), 19);
+
+  ASSERT_EQ(l2.size(), 2);
+  ASSERT_EQ(l2.front(), 5);
+  l2.pop_front();
+  ASSERT_EQ(l2.front(), 4);
+}
+
+TEST(List_iterator, can_create_null_iterator) {
+  ASSERT_NO_THROW(List<int>::iterator it);
+}
+TEST(List_iterator, can_get_begin_of_empty_list) {
+  List<int> l;
+  ASSERT_NO_THROW(List<int>::iterator it(l.begin()));
+}
+TEST(List_iterator, can_get_begin_of_non_empty_list) {
+  List<int> l;
+  l.push_front(3);
+  ASSERT_NO_THROW(List<int>::iterator it(l.begin()));
+}
+TEST(List_iterator, can_get_data_from_begin_of_non_empty_list) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  ASSERT_EQ(3, *it);
+}
+TEST(List_iterator, can_get_end_of_empty_list) {
+  List<int> l;
+  ASSERT_NO_THROW(List<int>::iterator it(l.end()));
+}
+TEST(List_iterator, can_get_end_of_non_empty_list) {
+  List<int> l;
+  l.push_front(3);
+  ASSERT_NO_THROW(List<int>::iterator it(l.begin()));
+}
+TEST(List_iterator, can_get_data) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  ASSERT_EQ(3, *it);
+}
+TEST(List_iterator, can_change_data) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  *it = 5;
+  ASSERT_EQ(5, *it);
+}
+TEST(List_iterator, changing_data_reflects_in_list) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  *it = 5;
+  List<int>::iterator it1 = l.begin();
+  ASSERT_EQ(5, *it1);
+}
+
+TEST(List_iterator, can_compare_equal_iterators_for_equality) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  List<int>::iterator it1(l.begin());
+  ASSERT_EQ(it == it1, true);
+}
+TEST(List_iterator, can_compare_non_equal_iterators_for_equality) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  l.push_front(5);
+  List<int>::iterator it1(l.begin());
+  ASSERT_EQ(it == it1, false);
+}
+TEST(List_iterator, can_compare_equal_iterators_for_non_equality) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  List<int>::iterator it1(l.begin());
+  ASSERT_EQ(it != it1, false);
+}
+TEST(List_iterator, can_compare_non_equal_iterators_for_non_equality) {
+  List<int> l;
+  l.push_front(3);
+  List<int>::iterator it(l.begin());
+  l.push_front(5);
+  List<int>::iterator it1(l.begin());
+  ASSERT_EQ(it != it1, true);
+}
+TEST(List_iterator, can_perform_prefix_increment) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(5);
+  List<int>::iterator it(l.begin());
+  List<int>::iterator it1 = ++it;
+  ASSERT_EQ(it1, it);
+}
+TEST(List_iterator, can_perform_postfix_increment) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(5);
+  List<int>::iterator it(l.begin());
+  List<int>::iterator it1 = it++;
+  ++it1;
+  ASSERT_EQ(it1, it);
+}
+TEST(List_iterator, can_iterate_through_list_prefix_form) {
+  List<int> l;
+  for (int i = 0; i < 10; i++) {
+    l.push_front(i);
+  }
+  int i = 0;
+  for (List<int>::iterator it(l.begin()); it != l.end(); ++it, i++) {
+    ASSERT_EQ(*it, 9-i);
+  }
+}
+TEST(List_iterator, can_iterate_through_list_postfix_form) {
+  List<int> l;
+  for (int i = 0; i < 10; i++) {
+    l.push_front(i);
+  }
+  int i = 0;
+  for (List<int>::iterator it(l.begin()); it != l.end(); it++, i++) {
+    ASSERT_EQ(*it, 9 - i);
+  }
+}
+TEST(List_iterator, can_push_element_into_list_after_iterator) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(5);
+  List<int>::iterator it(l.begin());
+  l.push_after(it, 4);
+  List<int>::iterator it1(l.begin());
+  ++it1;
+  ASSERT_EQ(4, *it1);
+  ++it1;
+  ASSERT_EQ(3, *it1);
+}
+TEST(List_iterator, can_erase_element_from_list_after_iterator) {
+  List<int> l;
+  l.push_front(3);
+  l.push_front(4);
+  l.push_front(5);
+  List<int>::iterator it(l.begin());
+  l.erase_after(it);
+  List<int>::iterator it1(l.begin());
+  ++it1;
+  ASSERT_EQ(3, *it1);
+}
+
 //
 // TEST(List, ){List<int> l; ASSERT_}
 // TEST(List, ){List<int> l;l.push_front(3); ASSERT_}
